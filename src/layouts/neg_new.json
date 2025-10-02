@@ -1,0 +1,54 @@
+{
+  "orgId": "a89|a926a8c72f9e42848c7648559505e9c1",
+  "enabled": true,
+  "name": "Negious Micro Credit",
+  "target": "origination",
+  "products": [
+    "Fast SME Loan",
+    "Business Loan",
+    "Salary Loan"
+  ],
+  "description": "Work flow for Fast SME, Business & Salary Loans",
+  "createdAt": {
+    "$date": "2024-11-07T14:04:54.106Z"
+  },
+  "stages": [
+    {
+      "index": 1,
+      "assignee": {
+        "roles": [
+          "banking:credit.manager"
+        ]
+      },
+      "next": {
+        "roles": [
+          "banking:operations.manager"
+        ]
+      },
+      "action": "approved",
+      "isFinal": false,
+      "assigneeType": "roles",
+      "_id": {
+        "$oid": "672cc906a18ceacbcc00f266"
+      }
+    },
+    {
+      "index": 2,
+      "assignee": {
+        "roles": [
+          "banking:operations.manager"
+        ]
+      },
+      "next": {
+        "roles": []
+      },
+      "action": "pending_disbursement",
+      "isFinal": true,
+      "assigneeType": "roles",
+      "_id": {
+        "$oid": "672cc906a18ceacbcc00f267"
+      }
+    }
+  ],
+  "__v": 0
+}
