@@ -1,178 +1,182 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  Area,
+  AreaChart,
+} from 'recharts';
 
 interface Props {
   className?: string;
 }
 
-// Simple Line Chart Component
-const LineChart: React.FC = () => {
-  const data = [
-    { month: 'Jan', value: 75 },
-    { month: 'Feb', value: 82 },
-    { month: 'Mar', value: 78 },
-    { month: 'Apr', value: 88 },
-    { month: 'May', value: 85 },
-    { month: 'Jun', value: 85 },
-  ];
-
-  const maxValue = Math.max(...data.map(d => d.value));
-  const minValue = Math.min(...data.map(d => d.value));
-  const range = maxValue - minValue;
-
-  const points = data.map((point, index) => {
-    const x = (index / (data.length - 1)) * 100;
-    const y = 100 - ((point.value - minValue) / range) * 80; // Leave 20% margin
-    return `${x},${y}`;
-  }).join(' ');
-
-  return (
-    <div className="h-64 w-full">
-      <svg viewBox="0 0 100 100" className="w-full h-full">
-        {/* Grid lines */}
-        <defs>
-          <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#374151" strokeWidth="0.5" opacity="0.3"/>
-          </pattern>
-        </defs>
-        <rect width="100" height="100" fill="url(#grid)" />
-        
-        {/* Line chart */}
-        <polyline
-          fill="none"
-          stroke="#3B82F6"
-          strokeWidth="2"
-          points={points}
-        />
-        
-        {/* Area fill */}
-        <polygon
-          fill="#3B82F6"
-          fillOpacity="0.2"
-          points={`0,100 ${points} 100,100`}
-        />
-        
-        {/* Data points */}
-        {data.map((point, index) => {
-          const x = (index / (data.length - 1)) * 100;
-          const y = 100 - ((point.value - minValue) / range) * 80;
-          return (
-            <circle
-              key={index}
-              cx={x}
-              cy={y}
-              r="1.5"
-              fill="#3B82F6"
-            />
-          );
-        })}
-        
-        {/* X-axis labels */}
-        {data.map((point, index) => {
-          const x = (index / (data.length - 1)) * 100;
-          return (
-            <text
-              key={index}
-              x={x}
-              y="95"
-              textAnchor="middle"
-              fontSize="8"
-              fill="#9CA3AF"
-            >
-              {point.month}
-            </text>
-          );
-        })}
-      </svg>
-    </div>
-  );
-};
-
-// Simple Bar Chart Component
-const BarChart: React.FC = () => {
-  const data = [
-    { department: 'Finance', value: 300 },
-    { department: 'Operations', value: 450 },
-    { department: 'Sales', value: 380 },
-    { department: 'Marketing', value: 320 },
-  ];
-
-  const maxValue = Math.max(...data.map(d => d.value));
-
-  return (
-    <div className="h-64 w-full">
-      <svg viewBox="0 0 100 100" className="w-full h-full">
-        {/* Grid lines */}
-        <defs>
-          <pattern id="grid2" width="10" height="10" patternUnits="userSpaceOnUse">
-            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#374151" strokeWidth="0.5" opacity="0.3"/>
-          </pattern>
-        </defs>
-        <rect width="100" height="100" fill="url(#grid2)" />
-        
-        {/* Bars */}
-        {data.map((item, index) => {
-          const barWidth = 20;
-          const barSpacing = 5;
-          const x = 10 + index * (barWidth + barSpacing);
-          const height = (item.value / maxValue) * 70; // Leave 30% margin
-          const y = 80 - height;
-          
-          return (
-            <g key={index}>
-              <rect
-                x={x}
-                y={y}
-                width={barWidth}
-                height={height}
-                fill="#1E40AF"
-                rx="2"
-              />
-              <text
-                x={x + barWidth / 2}
-                y="95"
-                textAnchor="middle"
-                fontSize="7"
-                fill="#9CA3AF"
-              >
-                {item.department}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-    </div>
-  );
-};
-
 export const PerformanceTrends: React.FC<Props> = ({ className }) => {
+  // Data for Auto-Match Rate Over Time
+  const autoMatchData = [
+    { month: 'Jan', rate: 75, target: 80 },
+    { month: 'Feb', rate: 82, target: 80 },
+    { month: 'Mar', rate: 78, target: 80 },
+    { month: 'Apr', rate: 88, target: 80 },
+    { month: 'May', rate: 85, target: 80 },
+    { month: 'Jun', rate: 92, target: 80 },
+    { month: 'Jul', rate: 89, target: 80 },
+    { month: 'Aug', rate: 91, target: 80 },
+    { month: 'Sep', rate: 87, target: 80 },
+    { month: 'Oct', rate: 93, target: 80 },
+    { month: 'Nov', rate: 90, target: 80 },
+    { month: 'Dec', rate: 95, target: 80 },
+  ];
+
+  // Data for Exceptions Resolved by Department
+  const departmentData = [
+    { department: 'Finance', resolved: 320, pending: 45 },
+    { department: 'Operations', resolved: 450, pending: 60 },
+    { department: 'Sales', resolved: 280, pending: 35 },
+    { department: 'Marketing', resolved: 200, pending: 25 },
+  ];
+
+  // Custom tooltip for line chart
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white border border-gray-200 shadow-lg rounded-lg p-3">
+          <p className="text-xs text-gray-600 mb-1">{payload[0].payload.month}</p>
+          <p className="text-sm font-semibold text-emerald-600">
+            Rate: {payload[0].value}%
+          </p>
+          {payload[1] && (
+            <p className="text-xs text-gray-500">Target: {payload[1].value}%</p>
+          )}
+        </div>
+      );
+    }
+    return null;
+  };
+
+  // Custom tooltip for bar chart
+  const CustomBarTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white border border-gray-200 shadow-lg rounded-lg p-3">
+          <p className="text-xs text-gray-600 mb-1">{payload[0].payload.department}</p>
+          <p className="text-sm font-semibold text-blue-600">
+            Resolved: {payload[0].value}
+          </p>
+          {payload[1] && (
+            <p className="text-sm font-semibold text-amber-600">
+              Pending: {payload[1].value}
+            </p>
+          )}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className={cn("", className)}>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Auto-Match Rate Over Time */}
-        <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-gray-900 font-semibold text-sm">Auto-Match Rate Over Time</h3>
+        <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-gray-900 font-semibold text-base">Auto-Match Rate Over Time</h3>
             <div className="text-right">
-              <div className="text-xl font-bold text-gray-900">85%</div>
-              <div className="text-xs text-emerald-600 font-medium">+5%</div>
+              <div className="text-2xl font-bold text-gray-900">85%</div>
+              <div className="text-xs text-emerald-600 font-medium">+5% vs last year</div>
             </div>
           </div>
-          <p className="text-gray-500 text-[10px] mb-3">Last 12 Months</p>
-          <LineChart />
+          <p className="text-gray-500 text-xs mb-4">Last 12 Months Performance</p>
+          
+          <ResponsiveContainer width="100%" height={300}>
+            <AreaChart data={autoMatchData}>
+              <defs>
+                <linearGradient id="colorRate" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                  <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis 
+                dataKey="month" 
+                tick={{ fill: '#6b7280', fontSize: 12 }}
+                tickLine={{ stroke: '#d1d5db' }}
+              />
+              <YAxis 
+                tick={{ fill: '#6b7280', fontSize: 12 }}
+                tickLine={{ stroke: '#d1d5db' }}
+                domain={[0, 100]}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Area 
+                type="monotone" 
+                dataKey="rate" 
+                stroke="#10b981" 
+                strokeWidth={3}
+                fill="url(#colorRate)" 
+              />
+              <Line 
+                type="monotone" 
+                dataKey="target" 
+                stroke="#f59e0b" 
+                strokeWidth={2}
+                strokeDasharray="5 5"
+                dot={false}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
         </div>
 
         {/* Exceptions Resolved by Department */}
-        <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-gray-900 font-semibold text-sm">Exceptions Resolved by Department</h3>
+        <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-gray-900 font-semibold text-base">Exceptions by Department</h3>
             <div className="text-right">
-              <div className="text-xl font-bold text-gray-900">1,250</div>
-              <div className="text-xs text-emerald-600 font-medium">+10%</div>
+              <div className="text-2xl font-bold text-gray-900">1,250</div>
+              <div className="text-xs text-emerald-600 font-medium">+10% resolution rate</div>
             </div>
           </div>
-          <p className="text-gray-500 text-[10px] mb-3">Last Quarter</p>
-          <BarChart />
+          <p className="text-gray-500 text-xs mb-4">Last Quarter Summary</p>
+          
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={departmentData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis 
+                dataKey="department" 
+                tick={{ fill: '#6b7280', fontSize: 11 }}
+                tickLine={{ stroke: '#d1d5db' }}
+              />
+              <YAxis 
+                tick={{ fill: '#6b7280', fontSize: 12 }}
+                tickLine={{ stroke: '#d1d5db' }}
+              />
+              <Tooltip content={<CustomBarTooltip />} />
+              <Legend 
+                wrapperStyle={{ fontSize: '12px', paddingTop: '20px' }}
+                iconType="circle"
+              />
+              <Bar 
+                dataKey="resolved" 
+                fill="#3b82f6" 
+                radius={[8, 8, 0, 0]}
+                name="Resolved"
+              />
+              <Bar 
+                dataKey="pending" 
+                fill="#f59e0b" 
+                radius={[8, 8, 0, 0]}
+                name="Pending"
+              />
+            </BarChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

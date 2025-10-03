@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { CustomDropdown } from '@/components/shared/custom.dropdown';
 import useMutateApi from '@/hooks/useMutateApi';
 import useQueryApi from '@/hooks/useQueryApi';
@@ -248,6 +248,46 @@ const MenuItems = (currentModule: string, permissions = ['']): Array<Links> => {
             icon: 'hugeicons:list-check-01',
             iconStyle: '',
             parent: ['ReconciledItems', false],
+            permitted_roles: [],
+          },
+          {
+            title: 'Reconciliation Workbench',
+            link: '/dashboard/reconciliation-workbench',
+            icon: 'hugeicons:workflow-square-01',
+            iconStyle: '',
+            parent: ['reconciliation-workbench', false],
+            permitted_roles: [],
+          },
+          {
+            title: 'Match Details',
+            link: '/dashboard/suggested-match-details/1',
+            icon: 'hugeicons:search-01',
+            iconStyle: '',
+            parent: ['suggested-match-details', false],
+            permitted_roles: [],
+          },
+          {
+            title: 'Force Match',
+            link: '/dashboard/force-match',
+            icon: 'hugeicons:link-square-02',
+            iconStyle: '',
+            parent: ['force-match', false],
+            permitted_roles: [],
+          },
+          {
+            title: 'Confirm Force Match',
+            link: '/dashboard/confirm-force-match',
+            icon: 'hugeicons:checkmark-square-02',
+            iconStyle: '',
+            parent: ['confirm-force-match', false],
+            permitted_roles: [],
+          },
+          {
+            title: 'Final Sign-Off',
+            link: '/dashboard/final-sign-off',
+            icon: 'hugeicons:checkmark-square-02',
+            iconStyle: '',
+            parent: ['final-sign-off', false],
             permitted_roles: [],
           },
         ],

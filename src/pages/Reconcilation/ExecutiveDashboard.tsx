@@ -7,9 +7,9 @@ import { KPICards, PerformanceTrends } from './components';
 const ExecutiveDashboard: React.FC = () => {
   return (
     <div className="h-full bg-gray-50 text-gray-900 overflow-auto">
-      <div className="max-w-7xl mx-auto px-4 py-4">
+      <div className="w-full h-full px-6 py-6">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-start justify-between mb-4 gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between mb-6 gap-4">
           <div>
             <h1 className="text-xl font-bold text-gray-900 mb-1">Executive Dashboard</h1>
             <p className="text-xs text-gray-600">High-level summary of reconciliation performance metrics</p>
@@ -58,14 +58,14 @@ const ExecutiveDashboard: React.FC = () => {
         </div>
 
         {/* KPI Cards */}
-        <div className="mb-4">
-          <h2 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Key Performance Indicators</h2>
+        <div className="mb-6">
+          <h2 className="text-xs font-semibold text-gray-700 mb-3 uppercase tracking-wide">Key Performance Indicators</h2>
           <KPICards className="bg-transparent" />
         </div>
 
         {/* Performance Trends */}
-        <div>
-          <h2 className="text-xs font-semibold text-gray-700 mb-2 uppercase tracking-wide">Performance Trends</h2>
+        <div className="mb-6">
+          <h2 className="text-xs font-semibold text-gray-700 mb-3 uppercase tracking-wide">Performance Trends</h2>
           <PerformanceTrends className="bg-transparent" />
         </div>
       </div>

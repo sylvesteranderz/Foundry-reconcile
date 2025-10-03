@@ -11,6 +11,12 @@ import Login from '@/pages/auth/login';
 import ExecutiveDashboard from '@/pages/Reconcilation/ExecutiveDashboard';
 import ReconciliationDashboard from '@/pages/Reconcilation/ReconciliationDashboard';
 import ReconciledItems from '@/pages/Reconcilation/ReconciledItems';
+import ReconcilationWorkbench from '@/pages/Reconcilation/ReconcilationWorkbench';
+import SuggestedMatchDetails from '@/pages/Reconcilation/SuggestedMatchDetails';
+import ForceMatch from '@/pages/Reconcilation/ForceMatch';
+import ConfirmForceMatch from '@/pages/Reconcilation/ConfirmForceMatch';
+import FinalSignOff from '@/pages/Reconcilation/FinalSignOff';
+import HistoricalArchive from '@/pages/Reconcilation/HistoricalArchive';
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +45,7 @@ export const router = createBrowserRouter([
         path: 'ReconciledItems',
         element: <ReconciledItems />,
       },
+      
       {
         path: 'verifications',
         element: <VerificationRecords />,
@@ -62,6 +69,30 @@ export const router = createBrowserRouter([
       {
         path: 'reconciled-items',
         element: <ReconciledItems />,
+      },
+      {
+        path: 'reconciliation-workbench',
+        element: <ReconcilationWorkbench />,
+      },
+      {
+        path: 'suggested-match-details/:id',
+        element: <SuggestedMatchDetails />,
+      },
+      {
+        path: 'force-match',
+        element: <ForceMatch />,
+      },
+      {
+        path: 'confirm-force-match',
+        element: <ConfirmForceMatch />,
+      },
+      {
+        path: 'final-sign-off',
+        element: <FinalSignOff />,
+      },
+      {
+        path: 'historical-archive',
+        element: <HistoricalArchive />,
       },
     ],
   },
